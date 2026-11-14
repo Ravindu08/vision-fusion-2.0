@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cyber-darkest text-slate-100 font-sans antialiased min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #07090e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1f293d;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+}
+
+.cyber-card {
+  @apply bg-cyber-card/80 backdrop-blur-md border border-cyber-border rounded-xl shadow-lg transition-all duration-300;
+}
+
+.cyber-card:hover {
+  @apply border-cyber-cyan/40 shadow-glow-cyan;
+}
+
+.cyber-gradient-text {
+  @apply bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400 bg-clip-text text-transparent;
+}
+
+.cyber-btn-primary {
+  @apply px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold rounded-lg shadow-glow-cyan transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+}
+
+.cyber-btn-secondary {
+  @apply px-4 py-2 bg-cyber-card border border-cyber-border hover:border-cyan-500/50 hover:bg-slate-800 text-slate-200 font-medium rounded-lg transition-all duration-200 cursor-pointer;
+}
+
