@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { Footer } from '../components/common/Footer';
 import { useAuth } from '../contexts/AuthContext';
@@ -30,6 +31,9 @@ export const QuizzesPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
 
+  const [searchParams] = useSearchParams();
+  const autoQuizId = searchParams.get('quizId');
+
   const fetchQuizzes = async () => {
     try {
       const data = await quizService.getQuizzes();
@@ -44,6 +48,12 @@ export const QuizzesPage: React.FC = () => {
   useEffect(() => {
     fetchQuizzes();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (autoQuizId && !activeQuiz && quizzes.length > 0) {
+      handleStartQuiz(autoQuizId);
+    }
+  }, [autoQuizId, quizzes]);
 
   const handleStartQuiz = async (quizId: string) => {
     setLoadingDetail(true);

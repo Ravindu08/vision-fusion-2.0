@@ -30,52 +30,52 @@ QUIZZES_DATA = [
             {
                 "text": "When solving an algorithmic whiteboard coding problem, what is the recommended first step before writing code?",
                 "options": [
-                    "Immediately start writing optimized code",
                     "Clarify requirements, constraints, edge cases, and discuss approach with the interviewer",
+                    "Immediately start writing optimized code",
                     "Ask the interviewer to provide the solution syntax",
                     "Skip time complexity analysis"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What does Big-O notation primarily evaluate in technical interview code assessments?",
                 "options": [
-                    "The number of lines of source code written",
                     "How algorithm execution time or space requirements scale relative to input size (n)",
+                    "The number of lines of source code written",
                     "The font size in the developer terminal",
                     "The network download speed of the application"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "During an HR interview, how should you answer the common prompt: 'Tell me about yourself'?",
                 "options": [
-                    "Recite your full birth story and personal hobbies chronologically",
                     "Provide a focused professional elevator pitch: background, key achievements, passions, and why this company excites you",
+                    "Recite your full birth story and personal hobbies chronologically",
                     "State only your university GPA and degree title",
                     "Complain about previous professors or project teammates"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the primary purpose of writing unit tests for your interview take-home coding assignment?",
                 "options": [
-                    "To artificially inflate the size of the Git commit",
                     "To demonstrate code correctness, edge-case resilience, and defensive engineering practices",
+                    "To artificially inflate the size of the Git commit",
                     "To replace documentation completely",
                     "To slow down the CI/CD pipeline"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "When an interviewer asks you a question to which you genuinely do not know the answer, what is the best approach?",
                 "options": [
-                    "Pretend you know and invent false technical facts",
-                    "Remain completely silent until they ask something else",
                     "Admit honestly that you don't know, explain how you would deduce or research it, and ask thoughtful questions",
+                    "Remain completely silent until they ask something else",
+                    "Pretend you know and invent false technical facts",
                     "Argue that the question is irrelevant in real industry work"
                 ],
-                "correct": 2,
+                "correct": 0,
             },
             {
                 "text": "In technical system design interviews, what does the CAP theorem state regarding distributed data stores?",
@@ -90,32 +90,32 @@ QUIZZES_DATA = [
             {
                 "text": "What is the standard etiquette regarding post-interview communication with recruiters?",
                 "options": [
-                    "Call the hiring manager personal phone repeatedly every hour",
                     "Send a polite, professional thank-you email within 24 hours expressing gratitude and reiterating enthusiasm",
+                    "Call the hiring manager personal phone repeatedly every hour",
                     "Post confidential interview questions immediately on social media",
                     "Never send any follow-up message under any circumstance"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In salary and compensation discussions, what is generally the best timing to negotiate offer terms?",
                 "options": [
-                    "During the very first minute of the initial phone screen",
                     "After receiving a formal written job offer when your value has been established",
+                    "During the very first minute of the initial phone screen",
                     "On your first day of work after signing the contract",
                     "Never negotiate under any circumstance"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "Which formatting principle is considered an industry best practice for tech CVs/Resumes?",
                 "options": [
-                    "Multi-color decorative fonts with 5-page biography",
                     "Action-oriented bullet points quantifying impact (e.g., 'Optimized query latency by 45% using indexing')",
+                    "Multi-color decorative fonts with 5-page biography",
                     "Listing Microsoft Word and Google Search as core technical skills",
                     "Omitting GitHub links and live project URLs"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
         ],
     },
@@ -629,3 +629,4 @@ def seed_quizzes():
 
 if __name__ == "__main__":
     seed_quizzes()
+

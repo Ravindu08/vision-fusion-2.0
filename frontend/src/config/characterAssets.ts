@@ -113,3 +113,17 @@ export const CHARACTER_ASSET_PATHS: Record<CharacterStage, Record<CharacterPose,
     focused: '/assets/characters/vanguard/pose_5.jpg',
   },
 };
+
+export type EventJourneyPose = 1 | 2 | 3 | 4 | 5;
+
+export const EVENT_POSE_META: Record<EventJourneyPose, { title: string; subtitle: string; badge: string }> = {
+  1: { title: 'Standby Mode', subtitle: 'Awaiting Event Session Participation', badge: 'Pose 1: Standby' },
+  2: { title: 'Combat Ready', subtitle: 'Attendance Claimed • Preparing for Quiz Arena', badge: 'Pose 2: Combat Ready' },
+  3: { title: 'Power Surge', subtitle: 'Deploying High-Energy Quiz Challenge', badge: 'Pose 3: Power Surge' },
+  4: { title: 'Tactical Overdrive', subtitle: 'Knowledge Quiz Completed Successfully', badge: 'Pose 4: Tactical Overdrive' },
+  5: { title: 'Apex Victory', subtitle: 'Event 70%+ Mastery Fully Achieved', badge: 'Pose 5: Apex Victory' },
+};
+
+export const getEventPoseImage = (stage: CharacterStage, pose: EventJourneyPose): string => {
+  return `/assets/characters/${stage}/pose_${pose}.jpg`;
+};
