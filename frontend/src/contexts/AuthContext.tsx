@@ -43,12 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchProfile = async () => {
     try {
       const profile = await authService.getCurrentUser();
-      
-      // Check if user evolved compared to existing state
-      if (user && profile.character_stage !== user.character_stage) {
-        triggerLevelUp(profile.stage_slug, user.character_stage, profile.total_xp);
-      }
-
       setUser(profile);
     } catch {
       localStorage.removeItem('vf2_token');

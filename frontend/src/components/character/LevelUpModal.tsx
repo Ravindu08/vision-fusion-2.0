@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { CharacterDisplay } from './CharacterDisplay';
 import { type CharacterStage, STAGES_METADATA } from '../../config/characterAssets';
 import confetti from 'canvas-confetti';
-import { Sparkles, ArrowRight, Award, Zap, CheckCircle2 } from 'lucide-react';
+import { Sparkles, ArrowRight, Award, Zap, CheckCircle2, X } from 'lucide-react';
 
 interface LevelUpModalProps {
   isOpen: boolean;
@@ -55,7 +55,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   const isCertEligible = meta.minPercent >= 40 || totalXp >= 350;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in"
+      onClick={onClose}
+    >
       {/* Background radial glow */}
       <div
         className="absolute w-[500px] h-[500px] rounded-full blur-[120px] opacity-30 pointer-events-none transition-all duration-700"
@@ -63,7 +66,19 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       />
 
       {/* Main Modal Card */}
-      <div className="relative w-full max-w-lg cyber-card p-6 md:p-8 text-center border-2 border-cyan-400/60 shadow-[0_0_50px_rgba(0,240,255,0.4)] overflow-hidden animate-scale-up">
+      <div
+        className="relative w-full max-w-lg cyber-card p-6 md:p-8 text-center border-2 border-cyan-400/60 shadow-[0_0_50px_rgba(0,240,255,0.4)] overflow-hidden animate-scale-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top-Right Dismiss Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 rounded-lg bg-cyber-dark/80 hover:bg-slate-800 text-slate-400 hover:text-white border border-cyber-border transition-colors z-20 cursor-pointer"
+          title="Dismiss"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
         {/* Futuristic Corner Accents */}
         <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-400 pointer-events-none" />
         <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-cyan-400 pointer-events-none" />
@@ -122,8 +137,14 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
         {/* Action Button */}
         <button
-          onClick={onClose}
-          className="w-full cyber-btn-primary py-3.5 text-xs font-mono uppercase font-black tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-glow-cyan"
+          onClick={() => {
+            onClose();
+            // If on quizzes page, navigate to dashboard to experience the evolved operative journey!
+            if (window.location.pathname.includes('/quizzes')) {
+              window.location.href = '/dashboard';
+            }
+          }}
+          className="w-full cyber-btn-primary py-3.5 text-xs font-mono uppercase font-black tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-glow-cyan hover:scale-[1.02] transition-transform"
         >
           Equip Evolution & Continue <Award className="w-4 h-4" />
         </button>
