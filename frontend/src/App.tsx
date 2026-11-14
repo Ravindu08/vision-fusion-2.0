@@ -10,6 +10,7 @@ import { EventsPage } from './pages/EventsPage';
 import { QuizzesPage } from './pages/QuizzesPage';
 import { CertificatePage } from './pages/CertificatePage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
 
 export const App: React.FC = () => {
   return (
@@ -45,8 +46,14 @@ export const App: React.FC = () => {
             }
           />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
-          {/* Upcoming Phases */}
-          <Route path="/admin" element={<ProtectedRoute requireAdmin><div className="p-16 text-center text-slate-400 font-mono">Admin Dashboard</div></ProtectedRoute>} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <AdminDashboardPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

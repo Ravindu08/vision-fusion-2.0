@@ -19,7 +19,8 @@ import {
   Sparkles,
   AlertCircle,
   LogIn,
-  Check
+  Check,
+  Shield
 } from 'lucide-react';
 
 export const EventsPage: React.FC = () => {
@@ -257,7 +258,11 @@ export const EventsPage: React.FC = () => {
 
                   {/* Action / Participation Button */}
                   <div className="pt-3">
-                    {session.has_participated ? (
+                    {user?.role === 'ADMIN' ? (
+                      <div className="w-full py-2.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono font-medium flex items-center justify-center gap-1.5 shadow-glow-purple">
+                        <Shield className="w-3.5 h-3.5 text-purple-400" /> Admin Preview Mode
+                      </div>
+                    ) : session.has_participated ? (
                       <div className="w-full py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5 shadow-glow-emerald">
                         <Check className="w-4 h-4" /> Participation Claimed (+{session.xp_reward} XP)
                       </div>

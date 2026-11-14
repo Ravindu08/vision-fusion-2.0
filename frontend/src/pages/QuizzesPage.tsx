@@ -14,7 +14,8 @@ import {
   Loader2,
   Sparkles,
   ChevronRight,
-  RotateCcw
+  RotateCcw,
+  Shield
 } from 'lucide-react';
 
 export const QuizzesPage: React.FC = () => {
@@ -246,24 +247,30 @@ export const QuizzesPage: React.FC = () => {
                     Answered {Object.keys(selectedAnswers).length} of {activeQuiz.questions.length} questions
                   </span>
 
-                  <button
-                    onClick={handleSubmitQuiz}
-                    disabled={
-                      submitting ||
-                      Object.keys(selectedAnswers).length < activeQuiz.questions.length
-                    }
-                    className="cyber-btn-primary px-8 py-3 text-xs font-mono uppercase font-bold flex items-center gap-2"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" /> Evaluating...
-                      </>
-                    ) : (
-                      <>
-                        Submit & Claim XP <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
+                  {user?.role === 'ADMIN' ? (
+                    <div className="px-6 py-2.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 font-mono text-xs flex items-center gap-2 shadow-glow-purple">
+                      <Shield className="w-4 h-4 text-purple-400" /> Admin Preview Mode — Scoring Disabled
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleSubmitQuiz}
+                      disabled={
+                        submitting ||
+                        Object.keys(selectedAnswers).length < activeQuiz.questions.length
+                      }
+                      className="cyber-btn-primary px-8 py-3 text-xs font-mono uppercase font-bold flex items-center gap-2"
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" /> Evaluating...
+                        </>
+                      ) : (
+                        <>
+                          Submit & Claim XP <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -340,7 +347,15 @@ export const QuizzesPage: React.FC = () => {
                   )}
 
                   <div className="pt-2">
-                    {quiz.is_completed && !quiz.has_passed ? (
+                    {user?.role === 'ADMIN' ? (
+                      <button
+                        onClick={() => handleStartQuiz(quiz.id)}
+                        disabled={loadingDetail}
+                        className="w-full py-2.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Shield className="w-3.5 h-3.5 text-purple-400" /> Preview Quiz (Admin)
+                      </button>
+                    ) : quiz.is_completed && !quiz.has_passed ? (
                       <button
                         onClick={() => handleStartQuiz(quiz.id)}
                         disabled={loadingDetail}
