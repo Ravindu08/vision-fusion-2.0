@@ -338,6 +338,17 @@
 
 ---
 
+### 15. Repository Preparation & Clean Git Initial Commit (2026-11-14) (GitHub වෙත දැමීමට සූදානම් කිරීම සහ Root Commit ✅)
+* **සිදුකළ දේ (What was done):**
+  - **රහස්‍යතා හා ආරක්ෂිත `.gitignore` සැකසීම:**
+    - `backend/.env` (Database passwords සහ JWT keys), `backend/venv/`, `frontend/node_modules/`, `frontend/dist/` සහ `__pycache__` සම්පූර්ණයෙන්ම ignore වන පරිදි root `.gitignore` ගොනුවක් සාදන ලදී.
+  - **කණ්ඩායමට පහසු සම්පූර්ණ `README.md` ලේඛනය:**
+    - Team members ලාට repository එක clone කර විනාඩි 2න් backend සහ frontend run කරගැනීමට අවශ්‍ය 3-Step Setup Instructions, Demo User / Admin Passwords, සහ Official IT Schedule ඇතුළත් කරන ලදී.
+  - **ප්‍රථම Git Initial Commit එක සම්පූර්ණ කිරීම:**
+    - `git init` කර, ගොනු 112ක් (Source codes, UI Components, Configs, 25 Character Assets) පමණක් අඩංගු පිරිසිදු `feat: Vision Fusion 2.0 full gamified platform (Phases 01-07)` commit එක සාදන ලදී. කිසිදු රහස්‍ය ගොනුවක් commit වී නොමැත.
+
+---
+
 ## 🛠️ පද්ධතිය Run කර පරීක්ෂා කරන ආකාරය (How to Run Locally)
 
 ### Backend එක Run කිරීම:
