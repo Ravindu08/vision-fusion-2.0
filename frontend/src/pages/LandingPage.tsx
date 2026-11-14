@@ -14,7 +14,6 @@ import {
   Sparkles,
   Zap,
   Award,
-  Shield,
   ArrowRight,
   Calendar,
   Terminal,
@@ -89,13 +88,13 @@ export const LandingPage: React.FC = () => {
 
               <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-slate-200 mb-8">
                 <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/80 border border-slate-700/80 backdrop-blur-md shadow-md">
-                  <Shield className="w-4 h-4 text-cyan-400" /> PostgreSQL ACID Guaranteed
+                  <Calendar className="w-4 h-4 text-cyan-400" /> 5 IT Career Sessions
                 </span>
                 <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/80 border border-slate-700/80 backdrop-blur-md shadow-md">
-                  <Zap className="w-4 h-4 text-amber-400" /> 30% Sessions / 70% Quizzes
+                  <Zap className="w-4 h-4 text-amber-400" /> 30% Attendance / 70% Quizzes
                 </span>
                 <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/80 border border-slate-700/80 backdrop-blur-md shadow-md">
-                  <Award className="w-4 h-4 text-emerald-400" /> &ge;35% Threshold Unlock
+                  <Award className="w-4 h-4 text-emerald-400" /> Official IEEE Certificate (&ge;35% XP)
                 </span>
               </div>
 
