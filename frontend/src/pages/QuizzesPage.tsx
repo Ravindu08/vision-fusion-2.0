@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { Footer } from '../components/common/Footer';
 import { useAuth } from '../contexts/AuthContext';
 import { quizService } from '../services/quizService';
 import type { QuizSummary, QuizDetail, QuizResult } from '../types/quiz';
+import { getEventPoseImage } from '../config/characterAssets';
 import confetti from 'canvas-confetti';
 import {
   Zap,
   CheckCircle2,
-  XCircle,
-  Award,
   ArrowRight,
   Loader2,
   Sparkles,
@@ -21,6 +20,7 @@ import {
 
 export const QuizzesPage: React.FC = () => {
   const { user, isAuthenticated, refreshUser, triggerLevelUp } = useAuth();
+  const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -155,54 +155,91 @@ export const QuizzesPage: React.FC = () => {
 
             {/* If Quiz Already Completed / Result Available */}
             {quizResult ? (
-              <div className="text-center py-8 space-y-4">
-                <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center bg-cyber-dark border border-cyber-border shadow-glow-cyan">
-                  {quizResult.passed ? (
-                    <Award className="w-8 h-8 text-emerald-400" />
-                  ) : (
-                    <XCircle className="w-8 h-8 text-red-400" />
-                  )}
+              <div className="text-center py-6 space-y-6 animate-in fade-in duration-300">
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5" /> Assessment Evaluated
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-black">
+                    {quizResult.passed ? (
+                      <span className="text-emerald-400 drop-shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                        Challenge Passed!
+                      </span>
+                    ) : (
+                      <span className="text-amber-400">
+                        Challenge Incomplete
+                      </span>
+                    )}
+                  </h3>
+                  <p className="text-xs md:text-sm font-mono text-slate-300 max-w-lg mx-auto">
+                    {quizResult.message}
+                  </p>
                 </div>
 
-                <h3 className="text-2xl font-black">
-                  {quizResult.passed ? (
-                    <span className="text-emerald-400">Challenge Passed!</span>
-                  ) : (
-                    <span className="text-amber-400">Challenge Incomplete</span>
-                  )}
-                </h3>
+                {/* THE CHARACTER DISPLAY LARGE */}
+                <div className="relative group my-4">
+                  <div className="w-60 h-76 sm:w-68 sm:h-84 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.35)] relative p-3 bg-cyber-darkest/90 flex flex-col items-center justify-center">
+                    <img
+                      src={getEventPoseImage(
+                        user?.stage_slug || 'recruit',
+                        quizResult.passed ? 4 : 1
+                      )}
+                      alt="Operative Pose"
+                      className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]"
+                    />
 
-                <p className="text-sm font-mono text-slate-300 max-w-md mx-auto">
-                  {quizResult.message}
-                </p>
+                    {/* Corner Accents */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-emerald-400" />
+                    <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-emerald-400" />
+                    <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-emerald-400" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-emerald-400" />
+                  </div>
+                  <div className="mt-2 text-xs font-mono font-bold text-cyan-400">
+                    {user?.character_stage || 'The Recruit'} • {quizResult.passed ? '[Tactical Overdrive Pose]' : '[Standby Mode]'}
+                  </div>
+                </div>
 
-                <div className="inline-flex items-center gap-6 p-4 rounded-xl bg-cyber-dark/80 border border-cyber-border font-mono text-xs">
-                  <div>
-                    <span className="text-slate-400 block">Score</span>
+                {/* Performance Metrics Badges */}
+                <div className="inline-flex flex-wrap items-center justify-center gap-4 p-4 rounded-xl bg-cyber-dark/90 border border-cyber-border font-mono text-xs">
+                  <div className="px-3">
+                    <span className="text-slate-400 block text-[10px] uppercase">Score</span>
                     <span className="text-base font-bold text-cyan-400">
                       {quizResult.score} / {quizResult.total_questions}
                     </span>
                   </div>
-                  <div>
-                    <span className="text-slate-400 block">Accuracy</span>
+                  <div className="px-3 border-l border-cyber-border">
+                    <span className="text-slate-400 block text-[10px] uppercase">Accuracy</span>
                     <span className="text-base font-bold text-purple-400">
                       {quizResult.percentage}%
                     </span>
                   </div>
-                  <div>
-                    <span className="text-slate-400 block">XP Gained</span>
+                  <div className="px-3 border-l border-cyber-border">
+                    <span className="text-slate-400 block text-[10px] uppercase">XP Awarded</span>
                     <span className="text-base font-bold text-emerald-400">
                       +{quizResult.xp_awarded} XP
                     </span>
                   </div>
+                  <div className="px-3 border-l border-cyber-border">
+                    <span className="text-slate-400 block text-[10px] uppercase">New Total XP</span>
+                    <span className="text-base font-bold text-amber-400">
+                      {quizResult.new_total_xp} / 500 XP
+                    </span>
+                  </div>
                 </div>
 
+                {/* Action Buttons */}
                 <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
                   <button
-                    onClick={() => setActiveQuiz(null)}
-                    className="cyber-btn-secondary px-5 py-2.5 text-xs font-mono uppercase font-bold"
+                    onClick={() => navigate('/dashboard')}
+                    className="cyber-btn-primary px-6 py-3 text-xs font-mono uppercase font-black tracking-wider flex items-center gap-2 shadow-glow-cyan cursor-pointer"
                   >
-                    Return to Quizzes Hub
+                    Return to Dashboard & Unlock Next Event <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setActiveQuiz(null)}
+                    className="cyber-btn-secondary px-5 py-3 text-xs font-mono uppercase font-bold cursor-pointer"
+                  >
+                    View All Quizzes
                   </button>
                   {quizResult.score < quizResult.total_questions && (
                     <button
@@ -210,7 +247,7 @@ export const QuizzesPage: React.FC = () => {
                         setQuizResult(null);
                         setSelectedAnswers({});
                       }}
-                      className="cyber-btn-primary px-5 py-2.5 text-xs font-mono uppercase font-bold flex items-center gap-1.5 shadow-glow-cyan"
+                      className="px-5 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-mono uppercase font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
                     >
                       <RotateCcw className="w-3.5 h-3.5" /> Retake & Boost XP
                     </button>

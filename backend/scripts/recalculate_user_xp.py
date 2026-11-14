@@ -100,3 +100,4 @@ def sync_and_recalculate_xp():
 
 if __name__ == "__main__":
     sync_and_recalculate_xp()
+

@@ -55,8 +55,25 @@ export const DashboardPage: React.FC = () => {
       ]);
       setSessions(sessionsData);
       setQuizzes(quizzesData);
-      if (sessionsData.length > 0 && !selectedSessionId) {
-        setSelectedSessionId(sessionsData[0].id);
+
+      // Auto-focus on the current unlocked & uncompleted event
+      if (sessionsData.length > 0) {
+        let activeIdx = 0;
+        for (let i = 0; i < sessionsData.length; i++) {
+          const s = sessionsData[i];
+          const q = quizzesData.find((qz) => qz.session_id === s.id);
+          const isDone = s.has_participated && ((s.xp_reward + (q?.xp_earned || 0)) >= 70);
+          if (!isDone) {
+            activeIdx = i;
+            break;
+          }
+          activeIdx = i;
+        }
+
+        setSelectedSessionId((prev) => {
+          if (!prev) return sessionsData[activeIdx].id;
+          return prev;
+        });
       }
     } catch (err) {
       console.error('Failed to load dashboard data', err);
@@ -528,13 +545,25 @@ export const DashboardPage: React.FC = () => {
 
                     {/* Step 3: Event Mastery Celebration Box */}
                     {isEventMastered && (
-                      <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs text-center space-y-1">
+                      <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs text-center space-y-2">
                         <div className="flex items-center justify-center gap-2 font-bold text-amber-400">
                           <Award className="w-4 h-4" /> EVENT 70%+ MASTERY UNLOCKED
                         </div>
                         <p className="text-[11px] text-slate-300 font-sans">
                           You have achieved {totalEventXp} XP for this session! Apex Victory Pose has been activated.
                         </p>
+                        {activeEventIndex < sessions.length - 1 && (
+                          <button
+                            onClick={() => {
+                              setSelectedSessionId(sessions[activeEventIndex + 1].id);
+                              setAnimatingPose(null);
+                              setCelebrationMessage(null);
+                            }}
+                            className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-slate-950 font-mono font-black text-xs uppercase flex items-center justify-center gap-2 shadow-glow-cyan hover:scale-[1.02] transition-transform cursor-pointer"
+                          >
+                            Advance to Next Unlocked Event (Event 0{activeEventIndex + 2}) <ArrowRight className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
