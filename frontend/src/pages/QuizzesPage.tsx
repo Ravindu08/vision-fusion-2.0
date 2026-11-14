@@ -94,14 +94,19 @@ export const QuizzesPage: React.FC = () => {
       }
 
       if (result.has_evolved) {
-        const stageSlug = result.character_stage.toLowerCase().replace(/ /g, '-') as any;
+        const stageSlug = result.character_stage
+          .toLowerCase()
+          .replace(/the\s+/g, '')
+          .replace(/\s+/g, '-') as any;
         triggerLevelUp(stageSlug, user?.character_stage, result.new_total_xp);
       }
 
       await refreshUser();
       await fetchQuizzes();
     } catch (err: any) {
-      alert(err.response?.data?.detail || 'Failed to submit quiz.');
+      console.error('Quiz submission error:', err);
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to submit quiz.';
+      alert(errorMsg);
     } finally {
       setSubmitting(false);
     }
