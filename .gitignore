@@ -4,6 +4,9 @@ backend/.env
 *.env
 *.env.local
 
+# Internal Setup & Maintenance Guide
+SETUP_GUIDE.md
+
 # Python Virtual Environments & Bytecode
 backend/venv/
 venv/
@@ -32,3 +35,4 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
