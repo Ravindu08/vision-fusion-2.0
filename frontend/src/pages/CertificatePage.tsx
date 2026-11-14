@@ -59,7 +59,7 @@ export const CertificatePage: React.FC = () => {
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      alert('Failed to download certificate. Ensure you have achieved at least 35% XP.');
+      alert('Failed to download certificate. Ensure you have achieved at least 70% XP (350+ XP).');
     } finally {
       setDownloading(false);
     }
@@ -83,7 +83,7 @@ export const CertificatePage: React.FC = () => {
               Vision Fusion 2.0 <span className="cyber-gradient-text">Digital Certificate</span>
             </h1>
             <p className="text-slate-400 text-sm font-mono leading-relaxed">
-              Awarded jointly by IEEE IAS Student Branch Chapter & IEEE WIE Affinity Group of Uva Wellassa University. Reach at least 35% XP (350+ XP) across events and quizzes to claim your verified certificate.
+              Awarded jointly by IEEE IAS Student Branch Chapter & IEEE WIE Affinity Group of Uva Wellassa University. Reach at least 70% XP (350+ XP out of 500 XP) across events and quizzes to claim your verified certificate.
             </p>
           </div>
         </div>
@@ -159,7 +159,7 @@ export const CertificatePage: React.FC = () => {
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center text-xs font-mono">
                     <span className="text-slate-300">Overall Progress</span>
-                    <span className="text-cyan-400 font-bold">{status.overall_percentage}% / 35.0%</span>
+                    <span className="text-cyan-400 font-bold">{status.overall_percentage}% / 70.0%</span>
                   </div>
                   <div className="w-full bg-cyber-dark h-3 rounded-full overflow-hidden border border-cyber-border">
                     <div
@@ -173,7 +173,7 @@ export const CertificatePage: React.FC = () => {
                   </div>
                   <div className="flex justify-between items-center text-[11px] font-mono text-slate-500">
                     <span>Current: {status.current_xp} XP</span>
-                    <span>Required: {status.threshold_xp} XP (35%)</span>
+                    <span>Required: {status.threshold_xp} XP (70%)</span>
                   </div>
                 </div>
 

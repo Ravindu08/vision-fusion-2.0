@@ -94,7 +94,7 @@ export const LandingPage: React.FC = () => {
                   <Zap className="w-4 h-4 text-amber-400" /> 30% Attendance / 70% Quizzes
                 </span>
                 <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/80 border border-slate-700/80 backdrop-blur-md shadow-md">
-                  <Award className="w-4 h-4 text-emerald-400" /> Official IEEE Certificate (&ge;35% XP)
+                  <Award className="w-4 h-4 text-emerald-400" /> Official IEEE Certificate (&ge;70% XP / 350+ XP)
                 </span>
               </div>
 
@@ -145,7 +145,7 @@ export const LandingPage: React.FC = () => {
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-cyber-border text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>Allocation: 300 XP</span>
+                <span>Allocation: 150 XP (30 XP &times; 5)</span>
                 <span className="text-cyan-400 font-bold">5 Sessions</span>
               </div>
             </div>
@@ -163,12 +163,12 @@ export const LandingPage: React.FC = () => {
                   Quizzes & Tech Challenges
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  Complete technical multiple-choice quizzes designed to test your knowledge on emerging tech, AI, full-stack principles, and career pathways.
+                  Complete 10-question technical quizzes for each event (70 XP per quiz, pass at 40%). Try again anytime to maximize your score and climb the leaderboard!
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-cyber-border text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>Allocation: 700 XP</span>
-                <span className="text-purple-400 font-bold">Real-time Scoring</span>
+                <span>Allocation: 350 XP (70 XP &times; 5)</span>
+                <span className="text-purple-400 font-bold">Retakes Allowed</span>
               </div>
             </div>
 
@@ -179,17 +179,17 @@ export const LandingPage: React.FC = () => {
                   <Award className="w-6 h-6" />
                 </div>
                 <div className="text-xs font-mono uppercase text-emerald-400 font-bold mb-1">
-                  &ge;35% Threshold
+                  &ge;70% Threshold
                 </div>
                 <h3 className="text-lg font-bold text-slate-100 mb-2">
                   Verified Digital Certificate
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                  Accumulate at least 35% of total event XP (350+ XP). The system automatically unlocks your cryptographic IEEE-branded certificate for instant download.
+                  Accumulate at least 70% of total event XP (350+ XP out of 500 XP). The system automatically unlocks your cryptographic IEEE-branded certificate for instant download.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-cyber-border text-xs font-mono text-slate-400 flex items-center justify-between">
-                <span>Threshold: 350 XP</span>
+                <span>Threshold: 350 XP (70%)</span>
                 <span className="text-emerald-400 font-bold">Instant Issuance</span>
               </div>
             </div>

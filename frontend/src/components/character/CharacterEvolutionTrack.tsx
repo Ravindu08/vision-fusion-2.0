@@ -25,6 +25,14 @@ export const CharacterEvolutionTrack: React.FC<CharacterEvolutionTrackProps> = (
     'vanguard',
   ];
 
+  const STAGE_THRESHOLDS: Record<CharacterStage, number> = {
+    'recruit': 0,
+    'builder': 100,
+    'pathfinder': 200,
+    'intelligence-operative': 350,
+    'vanguard': 450,
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-3">
@@ -32,14 +40,14 @@ export const CharacterEvolutionTrack: React.FC<CharacterEvolutionTrackProps> = (
           <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> 5-Stage Operative Evolution Track
         </span>
         <span className="text-xs font-mono text-cyan-400 font-bold">
-          {totalXp} / 1,000 XP
+          {totalXp} / 500 XP
         </span>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        {stages.map((st, idx) => {
+        {stages.map((st) => {
           const meta = STAGES_METADATA[st];
-          const thresholdXp = idx * 200;
+          const thresholdXp = STAGE_THRESHOLDS[st];
           const isUnlocked = totalXp >= thresholdXp;
           const isCurrent = currentStage === st;
           const imageSrc = CHARACTER_ASSET_PATHS[st]?.idle || CHARACTER_ASSET_PATHS.recruit.idle;
@@ -87,9 +95,9 @@ export const CharacterEvolutionTrack: React.FC<CharacterEvolutionTrackProps> = (
                 {thresholdXp === 0 ? 'Start (0 XP)' : `${thresholdXp} XP`}
               </div>
 
-              {/* Certificate Badge on Stage 3 */}
-              {st === 'pathfinder' && (
-                <span className="mt-1.5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+              {/* Certificate Badge on Intelligence Operative (350+ XP) */}
+              {st === 'intelligence-operative' && (
+                <span className="mt-1.5 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30 flex items-center gap-1">
                   <Award className="w-2.5 h-2.5" /> Cert Unlock
                 </span>
               )}

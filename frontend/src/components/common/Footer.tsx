@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
             <li>• 30% XP via Event Participation</li>
             <li>• 70% XP via Quizzes & Challenges</li>
             <li>• 5 Character Stages (25 Official Poses)</li>
-            <li>• &ge;35% Overall XP for Certificate</li>
+            <li>• &ge;70% Overall XP for Certificate (350+ XP)</li>
             <li>• Zero manual admin attendance</li>
           </ul>
         </div>

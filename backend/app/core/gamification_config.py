@@ -43,24 +43,24 @@ STAGE_DEFINITIONS: List[Dict[str, Any]] = [
         "stage": CharacterStage.THE_PATHFINDER,
         "slug": "pathfinder",
         "min_percent": 40.0,
-        "max_percent": 59.99,
+        "max_percent": 69.99,
         "title": "The Pathfinder",
         "tagline": "Navigating modern tech horizons",
-        "description": "Career paths are unfolding. You have officially unlocked certificate eligibility!",
+        "description": "Career paths are unfolding. Assembling skills and heading towards certificate qualification.",
     },
     {
         "stage": CharacterStage.THE_INTELLIGENCE_OPERATIVE,
         "slug": "intelligence-operative",
-        "min_percent": 60.0,
-        "max_percent": 79.99,
+        "min_percent": 70.0,
+        "max_percent": 89.99,
         "title": "The Intelligence Operative",
-        "tagline": "Mastering analytics and high-level strategy",
-        "description": "Extracting insights, decoding challenges, and performing at peak problem-solving speed.",
+        "tagline": "Mastering strategy & analytics (Certificate Unlocked!)",
+        "description": "350+ XP unlocked! Official IEEE Digital Certificate eligibility achieved.",
     },
     {
         "stage": CharacterStage.THE_VANGUARD,
         "slug": "vanguard",
-        "min_percent": 80.0,
+        "min_percent": 90.0,
         "max_percent": 100.0,
         "title": "The Vanguard",
         "tagline": "At the forefront of technical innovation",
@@ -69,10 +69,10 @@ STAGE_DEFINITIONS: List[Dict[str, Any]] = [
 ]
 
 
-def calculate_character_stage(current_xp: int, total_possible_xp: int = 1000) -> Dict[str, Any]:
+def calculate_character_stage(current_xp: int, total_possible_xp: int = 500) -> Dict[str, Any]:
     """Calculate character stage and progression metrics based on current XP."""
     if total_possible_xp <= 0:
-        total_possible_xp = 1000
+        total_possible_xp = 500
 
     percent = (current_xp / total_possible_xp) * 100.0
     
@@ -112,6 +112,6 @@ def calculate_character_stage(current_xp: int, total_possible_xp: int = 1000) ->
         "next_stage": next_stage_info["stage"] if next_stage_info else None,
         "next_stage_title": next_stage_info["title"] if next_stage_info else "Max Stage Reached",
         "xp_to_next_stage": xp_to_next,
-        "is_certificate_eligible": percent >= 35.0,
+        "is_certificate_eligible": current_xp >= 350,
     }
 

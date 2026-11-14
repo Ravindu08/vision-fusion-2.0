@@ -31,7 +31,14 @@ def declare_participation(
     3. Records attendance, creates XP transaction, and updates user total XP.
     4. Evaluates character stage evolution automatically.
     """
-    # 1. Fetch target event session
+    # 1. Reject administrator participation
+    if current_user.role == "ADMIN":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Administrator accounts cannot participate in student events or claim attendance XP.",
+        )
+
+    # 2. Fetch target event session
     session_obj = db.query(EventSession).filter(
         EventSession.id == session_id,
         EventSession.is_active == True

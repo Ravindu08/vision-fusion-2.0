@@ -39,39 +39,38 @@ def test_database_seeded_entities():
         # Check quiz
         quiz = db.query(Quiz).first()
         assert quiz is not None
-        assert quiz.xp_reward == 100
+        assert quiz.xp_reward == 70
     finally:
         db.close()
 
 
 def test_character_stage_evolution_math():
     # 0 XP -> The Recruit (0%)
-    res_0 = calculate_character_stage(0, 1000)
+    res_0 = calculate_character_stage(0, 500)
     assert res_0["current_stage"] == CharacterStage.THE_RECRUIT
     assert res_0["is_certificate_eligible"] is False
-    assert res_0["xp_to_next_stage"] == 200
+    assert res_0["xp_to_next_stage"] == 100
 
-    # 250 XP -> The Builder (25%)
-    res_250 = calculate_character_stage(250, 1000)
-    assert res_250["current_stage"] == CharacterStage.THE_BUILDER
+    # 150 XP -> The Builder (30%)
+    res_150 = calculate_character_stage(150, 500)
+    assert res_150["current_stage"] == CharacterStage.THE_BUILDER
+    assert res_150["is_certificate_eligible"] is False
+    assert res_150["xp_to_next_stage"] == 50  # 200 - 150
+
+    # 250 XP -> The Pathfinder (50%)
+    res_250 = calculate_character_stage(250, 500)
+    assert res_250["current_stage"] == CharacterStage.THE_PATHFINDER
     assert res_250["is_certificate_eligible"] is False
-    assert res_250["xp_to_next_stage"] == 150  # 400 - 250
+    assert res_250["xp_to_next_stage"] == 100  # 350 - 250
 
-    # 350 XP -> The Builder (35%) -> Cert Eligible!
-    res_350 = calculate_character_stage(350, 1000)
+    # 350 XP -> The Intelligence Operative (70%) -> Cert Eligible!
+    res_350 = calculate_character_stage(350, 500)
+    assert res_350["current_stage"] == CharacterStage.THE_INTELLIGENCE_OPERATIVE
     assert res_350["is_certificate_eligible"] is True
+    assert res_350["xp_to_next_stage"] == 100  # 450 - 350
 
-    # 450 XP -> The Pathfinder (45%)
-    res_450 = calculate_character_stage(450, 1000)
-    assert res_450["current_stage"] == CharacterStage.THE_PATHFINDER
-    assert res_450["is_certificate_eligible"] is True
-
-    # 650 XP -> The Intelligence Operative (65%)
-    res_650 = calculate_character_stage(650, 1000)
-    assert res_650["current_stage"] == CharacterStage.THE_INTELLIGENCE_OPERATIVE
-
-    # 850 XP -> The Vanguard (85%)
-    res_850 = calculate_character_stage(850, 1000)
-    assert res_850["current_stage"] == CharacterStage.THE_VANGUARD
-    assert res_850["next_stage"] is None
+    # 460 XP -> The Vanguard (92%)
+    res_460 = calculate_character_stage(460, 500)
+    assert res_460["current_stage"] == CharacterStage.THE_VANGUARD
+    assert res_460["next_stage"] is None
 

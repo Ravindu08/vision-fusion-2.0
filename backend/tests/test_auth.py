@@ -117,7 +117,7 @@ def test_get_current_user_me(client):
     assert user_data["character_stage"] == "The Recruit"
     assert user_data["stage_slug"] == "recruit"
     assert user_data["is_certificate_eligible"] is False
-    assert user_data["xp_to_next_stage"] == 200
+    assert user_data["xp_to_next_stage"] == 100
 
 
 def test_get_me_unauthorized(client):

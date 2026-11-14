@@ -469,7 +469,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <input
                       type="number"
                       min={0}
-                      max={1000}
+                      max={500}
                       value={editForm.total_xp ?? 0}
                       onChange={(e) => setEditForm((prev) => ({ ...prev, total_xp: parseInt(e.target.value, 10) || 0 }))}
                       className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm text-slate-100 focus:outline-none focus:border-purple-400 font-mono"

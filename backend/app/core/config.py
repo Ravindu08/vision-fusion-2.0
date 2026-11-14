@@ -23,9 +23,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+psycopg://postgres:123456@localhost:5432/vision_fusion"
     SQLITE_FALLBACK_URL: str = "sqlite:///./vision_fusion.db"
 
-    # Gamification
-    TOTAL_POSSIBLE_XP: int = 1000
-    CERTIFICATE_THRESHOLD_PERCENT: float = 35.0
+    # Gamification (5 Events x 100 XP = 500 XP total; Certificate at >= 350 XP)
+    TOTAL_POSSIBLE_XP: int = 500
+    CERTIFICATE_THRESHOLD_PERCENT: float = 70.0
 
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [

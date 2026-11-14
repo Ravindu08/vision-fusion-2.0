@@ -17,7 +17,7 @@ OFFICIAL_EVENTS = [
         "venue": "Main Auditorium & Career Labs, Uva Wellassa University",
         "meeting_url": None,
         "joining_instructions": "Please arrive on time with a printed copy of your updated CV / Resume.",
-        "xp_reward": 60,
+        "xp_reward": 30,
     },
     {
         "title": "TechCareerX - Software Commercialization and Standards",
@@ -29,7 +29,7 @@ OFFICIAL_EVENTS = [
         "venue": None,
         "meeting_url": "https://meet.google.com/visionfusion-techcareerx",
         "joining_instructions": "Online session via Google Meet. Join using your registered student email.",
-        "xp_reward": 60,
+        "xp_reward": 30,
     },
     {
         "title": "Futurista - Future of IT",
@@ -41,7 +41,7 @@ OFFICIAL_EVENTS = [
         "venue": None,
         "meeting_url": "https://meet.google.com/visionfusion-futurista",
         "joining_instructions": "Online session via Google Meet. Please keep microphones muted upon joining.",
-        "xp_reward": 60,
+        "xp_reward": 30,
     },
     {
         "title": "BugHunt - AI for University Life and Industry",
@@ -53,7 +53,7 @@ OFFICIAL_EVENTS = [
         "venue": "Computer Center / Main Lab, Uva Wellassa University",
         "meeting_url": None,
         "joining_instructions": "Hands-on interactive workshop. Bring your university laptops or utilize lab terminals.",
-        "xp_reward": 60,
+        "xp_reward": 30,
     },
     {
         "title": "Road to Role - IT Career Pathway Discussions",
@@ -65,7 +65,7 @@ OFFICIAL_EVENTS = [
         "venue": "Faculty Complex Hall A, Uva Wellassa University",
         "meeting_url": None,
         "joining_instructions": "Open to all undergraduates. Interactive Q&A with industry guest speakers.",
-        "xp_reward": 60,
+        "xp_reward": 30,
     },
 ]
 

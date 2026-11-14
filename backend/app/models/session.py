@@ -17,7 +17,7 @@ class EventSession(Base):
     venue = Column(String(255), nullable=True)
     meeting_url = Column(String(500), nullable=True)
     joining_instructions = Column(Text, nullable=True)
-    xp_reward = Column(Integer, nullable=False, default=60)
+    xp_reward = Column(Integer, nullable=False, default=30)
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 

@@ -103,7 +103,7 @@ export const DashboardPage: React.FC = () => {
                 <div className="text-2xl font-black text-cyan-400 font-mono mt-0.5">
                   {user.total_xp}
                 </div>
-                <div className="text-[10px] text-slate-500 font-mono">1,000 Max Budget</div>
+                <div className="text-[10px] text-slate-500 font-mono">500 Max Budget</div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-cyber-dark/80 border border-cyber-border text-center min-w-[120px]">
@@ -127,7 +127,7 @@ export const DashboardPage: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Lock className="w-3.5 h-3.5" /> {user.overall_percent}% / 35%
+                      <Lock className="w-3.5 h-3.5" /> {user.overall_percent}% / 70%
                     </>
                   )}
                 </div>
@@ -260,7 +260,7 @@ export const DashboardPage: React.FC = () => {
                     )}
                   </div>
                   <p className="text-xs text-slate-400 font-sans mt-0.5">
-                    Accumulate &ge;35% of total event XP (350+ XP) to unlock the official IEEE PDF certificate.
+                    Accumulate &ge;70% of total event XP (350+ XP) to unlock the official IEEE PDF certificate.
                   </p>
                 </div>
               </div>
@@ -396,7 +396,7 @@ export const DashboardPage: React.FC = () => {
               >
                 <HelpCircle className="w-6 h-6 text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-bold text-slate-200">Quizzes</span>
-                <span className="text-[10px] text-slate-400 font-mono mt-0.5">700 XP Arena</span>
+                <span className="text-[10px] text-slate-400 font-mono mt-0.5">350 XP Arena</span>
               </Link>
 
               <Link
@@ -405,7 +405,7 @@ export const DashboardPage: React.FC = () => {
               >
                 <Award className="w-6 h-6 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-bold text-slate-200">Certificate</span>
-                <span className="text-[10px] text-slate-400 font-mono mt-0.5">&ge;35% Threshold</span>
+                <span className="text-[10px] text-slate-400 font-mono mt-0.5">&ge;70% Threshold (350+ XP)</span>
               </Link>
             </div>
           </div>

@@ -60,7 +60,7 @@ def test_admin_endpoints_permission_and_crud(client):
         assert target is not None
         assert target["full_name"] == "Admin Test Student"
 
-        # 7. Admin update student (adjust XP to 400 -> should auto-evolve to The Pathfinder)
+        # 7. Admin update student (adjust XP to 400 -> should auto-evolve to The Intelligence Operative)
         res = client.put(
             f"/api/v1/admin/users/{student_id}",
             json={"total_xp": 400, "full_name": "Admin Test Student Updated"},
@@ -70,7 +70,7 @@ def test_admin_endpoints_permission_and_crud(client):
         updated = res.json()
         assert updated["full_name"] == "Admin Test Student Updated"
         assert updated["total_xp"] == 400
-        assert updated["character_stage"] == "The Pathfinder"
+        assert updated["character_stage"] == "The Intelligence Operative"
         assert updated["certificate_eligible"] is True
 
         # 8. Export CSV
@@ -98,3 +98,4 @@ def test_admin_endpoints_permission_and_crud(client):
         db.query(User).filter(User.id == student_id).delete()
         db.commit()
         db.close()
+

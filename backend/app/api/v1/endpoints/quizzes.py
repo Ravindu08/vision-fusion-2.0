@@ -1,6 +1,7 @@
 from typing import List, Optional
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -46,10 +47,12 @@ def get_quizzes(
         attempts = (
             db.query(QuizAttempt)
             .filter(QuizAttempt.user_id == current_user.id)
+            .order_by(QuizAttempt.xp_awarded.desc(), QuizAttempt.score.desc())
             .all()
         )
         for att in attempts:
-            user_attempts[att.quiz_id] = att
+            if att.quiz_id not in user_attempts:
+                user_attempts[att.quiz_id] = att
 
     results = []
     for q in quizzes:
@@ -103,6 +106,7 @@ def get_quiz_detail(
         att = (
             db.query(QuizAttempt)
             .filter(QuizAttempt.user_id == current_user.id, QuizAttempt.quiz_id == quiz_id)
+            .order_by(QuizAttempt.xp_awarded.desc(), QuizAttempt.score.desc())
             .first()
         )
 
@@ -151,7 +155,14 @@ def submit_quiz(
             detail="Quiz not found."
         )
 
-    # Check if student already completed this quiz
+    # 0. Reject administrator quiz submissions
+    if current_user.role == "ADMIN":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Administrator accounts cannot submit quizzes or gain student XP."
+        )
+
+    # Check if student already completed this quiz (if retakes prohibited)
     existing_attempt = (
         db.query(QuizAttempt)
         .filter(QuizAttempt.user_id == current_user.id, QuizAttempt.quiz_id == quiz_id)
@@ -184,26 +195,24 @@ def submit_quiz(
     percentage = round((correct_count / total_questions) * 100.0, 1)
     passed = percentage >= quiz.pass_percentage
 
-    # Determine XP award (awarded only if passed and not previously rewarded)
-    xp_to_award = 0
-    if passed:
-        # Check if user was already awarded XP for this quiz in previous attempt (if retakes allowed)
-        prior_rewarded = (
-            db.query(QuizAttempt)
-            .filter(
-                QuizAttempt.user_id == current_user.id,
-                QuizAttempt.quiz_id == quiz_id,
-                QuizAttempt.xp_awarded > 0
-            )
-            .first()
-        )
-        if not prior_rewarded:
-            xp_to_award = quiz.xp_reward
+    # Proportional score-based XP (e.g. 10 MCQs x 7 XP = 70 XP total)
+    current_earned_xp = int(round((correct_count / total_questions) * quiz.xp_reward)) if passed else 0
+
+    # User's prior maximum XP awarded on this quiz
+    prior_max_xp = (
+        db.query(func.max(QuizAttempt.xp_awarded))
+        .filter(QuizAttempt.user_id == current_user.id, QuizAttempt.quiz_id == quiz.id)
+        .scalar()
+        or 0
+    )
+
+    # Incremental XP award (increases student XP if score improved on retake!)
+    xp_to_award = max(0, current_earned_xp - prior_max_xp)
 
     now_utc = datetime.now(timezone.utc)
 
     try:
-        # 1. Record Quiz Attempt
+        # 1. Record Quiz Attempt with earned XP on this attempt
         attempt = QuizAttempt(
             user_id=current_user.id,
             quiz_id=quiz.id,
@@ -211,13 +220,13 @@ def submit_quiz(
             total_questions=total_questions,
             percentage=percentage,
             passed=passed,
-            xp_awarded=xp_to_award,
+            xp_awarded=current_earned_xp,
             completed_at=now_utc,
         )
         db.add(attempt)
         db.flush()
 
-        # 2. If XP awarded, create XPTransaction and increment User total_xp
+        # 2. If incremental XP awarded, create XPTransaction and increment User total_xp
         previous_stage = current_user.character_stage
         has_evolved = False
 
@@ -227,7 +236,7 @@ def submit_quiz(
                 amount=xp_to_award,
                 source_type="QUIZ",
                 reference_id=quiz.id,
-                description=f"Passed Quiz: {quiz.title} ({percentage}%)",
+                description=f"Quiz '{quiz.title}': {correct_count}/{total_questions} ({percentage}%), +{xp_to_award} XP",
                 created_at=now_utc,
             )
             db.add(xp_tx)
@@ -239,7 +248,7 @@ def submit_quiz(
                 current_xp=current_user.total_xp,
                 total_possible_xp=settings.TOTAL_POSSIBLE_XP
             )
-            new_stage = stage_info["current_stage"]
+            new_stage = stage_info["current_stage"].value if hasattr(stage_info["current_stage"], "value") else str(stage_info["current_stage"])
             has_evolved = new_stage != previous_stage
             if has_evolved:
                 current_user.character_stage = new_stage

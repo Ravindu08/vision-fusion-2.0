@@ -182,13 +182,24 @@ export const QuizzesPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
                   <button
                     onClick={() => setActiveQuiz(null)}
-                    className="cyber-btn-primary px-6 py-2.5 text-xs font-mono uppercase font-bold"
+                    className="cyber-btn-secondary px-5 py-2.5 text-xs font-mono uppercase font-bold"
                   >
                     Return to Quizzes Hub
                   </button>
+                  {quizResult.score < quizResult.total_questions && (
+                    <button
+                      onClick={() => {
+                        setQuizResult(null);
+                        setSelectedAnswers({});
+                      }}
+                      className="cyber-btn-primary px-5 py-2.5 text-xs font-mono uppercase font-bold flex items-center gap-1.5 shadow-glow-cyan"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" /> Retake & Boost XP
+                    </button>
+                  )}
                 </div>
               </div>
             ) : (
@@ -355,18 +366,20 @@ export const QuizzesPage: React.FC = () => {
                       >
                         <Shield className="w-3.5 h-3.5 text-purple-400" /> Preview Quiz (Admin)
                       </button>
-                    ) : quiz.is_completed && !quiz.has_passed ? (
-                      <button
-                        onClick={() => handleStartQuiz(quiz.id)}
-                        disabled={loadingDetail}
-                        className="w-full py-2.5 rounded-lg bg-cyber-dark border border-cyber-border text-slate-300 hover:text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                      >
-                        <RotateCcw className="w-3.5 h-3.5" /> Retake Challenge
-                      </button>
-                    ) : quiz.is_completed && quiz.has_passed ? (
-                      <div className="w-full py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4" /> Passed & Claimed (+{quiz.xp_earned} XP)
-                      </div>
+                    ) : quiz.is_completed ? (
+                      quiz.xp_earned >= quiz.xp_reward ? (
+                        <div className="w-full py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5">
+                          <CheckCircle2 className="w-4 h-4" /> Max XP Achieved (+{quiz.xp_earned} XP)
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleStartQuiz(quiz.id)}
+                          disabled={loadingDetail}
+                          className="w-full py-2.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" /> Try Again to Boost XP (+{quiz.xp_reward - quiz.xp_earned} XP remaining)
+                        </button>
+                      )
                     ) : (
                       <button
                         onClick={() => handleStartQuiz(quiz.id)}

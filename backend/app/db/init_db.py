@@ -41,7 +41,7 @@ def init_db():
                     "start_time": time(9, 0),
                     "end_time": time(13, 0),
                     "venue": "Main Auditorium & Career Labs, Uva Wellassa University",
-                    "xp_reward": 60,
+                    "xp_reward": 30,
                 },
                 {
                     "title": "TechCareerX - Software Commercialization and Standards",
@@ -52,7 +52,7 @@ def init_db():
                     "end_time": time(16, 30),
                     "meeting_url": "https://meet.google.com/visionfusion-techcareerx",
                     "joining_instructions": "Online session via Google Meet. Join using your registered student email.",
-                    "xp_reward": 60,
+                    "xp_reward": 30,
                 },
                 {
                     "title": "Futurista - Future of IT",
@@ -63,7 +63,7 @@ def init_db():
                     "end_time": time(12, 30),
                     "meeting_url": "https://meet.google.com/visionfusion-futurista",
                     "joining_instructions": "Online session via Google Meet. Please keep microphones muted upon joining.",
-                    "xp_reward": 60,
+                    "xp_reward": 30,
                 },
                 {
                     "title": "BugHunt - AI for University Life and Industry",
@@ -73,7 +73,7 @@ def init_db():
                     "start_time": time(14, 0),
                     "end_time": time(16, 30),
                     "venue": "Computer Center / Main Lab, Uva Wellassa University",
-                    "xp_reward": 60,
+                    "xp_reward": 30,
                 },
                 {
                     "title": "Road to Role - IT Career Pathway Discussions",
@@ -83,7 +83,7 @@ def init_db():
                     "start_time": time(9, 30),
                     "end_time": time(12, 30),
                     "venue": "Faculty Complex Hall A, Uva Wellassa University",
-                    "xp_reward": 60,
+                    "xp_reward": 30,
                 },
             ]
             for s_info in sessions_data:

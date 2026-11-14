@@ -43,3 +43,4 @@ class AdminUserUpdate(BaseModel):
     university: Optional[str] = Field(None, max_length=150)
     total_xp: Optional[int] = Field(None, ge=0, le=1000)
     is_active: Optional[bool] = None
+

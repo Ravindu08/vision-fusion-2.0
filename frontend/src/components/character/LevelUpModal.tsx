@@ -115,7 +115,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           {isCertEligible && (
             <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center justify-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Official Digital Certificate Eligibility Unlocked (&ge;35% XP)!</span>
+              <span>Official Digital Certificate Eligibility Unlocked (&ge;70% XP / 350+ XP)!</span>
             </div>
           )}
         </div>
