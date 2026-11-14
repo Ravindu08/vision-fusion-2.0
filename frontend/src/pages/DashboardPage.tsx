@@ -62,7 +62,8 @@ export const DashboardPage: React.FC = () => {
         for (let i = 0; i < sessionsData.length; i++) {
           const s = sessionsData[i];
           const q = quizzesData.find((qz) => qz.session_id === s.id);
-          const isDone = s.has_participated && ((s.xp_reward + (q?.xp_earned || 0)) >= 70);
+          const eventXp = (s.has_participated ? (s.xp_reward || 30) : 0) + (q?.xp_earned || 0);
+          const isDone = eventXp >= 70 || (s.has_participated && (q?.has_passed || false));
           if (!isDone) {
             activeIdx = i;
             break;
@@ -111,13 +112,13 @@ export const DashboardPage: React.FC = () => {
       quizzes.find((q) => q.title.toLowerCase().includes(currentSession.title.split(' ')[0].toLowerCase()))
     : null;
 
-  // Helper function to check if a session is completed (Attendance 30 XP + Quiz >= 28 XP -> 70%+)
+  // Helper function to check if a session is completed (Total Event XP >= 70 OR Attendance + Quiz Passed)
   const isSessionCompleted = (sessId: string): boolean => {
     const s = sessions.find((item) => item.id === sessId);
-    if (!s || !s.has_participated) return false;
+    if (!s) return false;
     const q = quizzes.find((qz) => qz.session_id === s.id);
-    const quizXp = q?.xp_earned || 0;
-    return (s.xp_reward + quizXp) >= 70;
+    const eventXp = (s.has_participated ? (s.xp_reward || 30) : 0) + (q?.xp_earned || 0);
+    return Boolean(eventXp >= 70 || (s.has_participated && (q?.has_passed || false)));
   };
 
   // Event 0 is unlocked. Event i is unlocked if event i-1 is completed!

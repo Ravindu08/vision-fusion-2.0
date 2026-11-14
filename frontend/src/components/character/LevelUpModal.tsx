@@ -137,13 +137,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
         {/* Action Button */}
         <button
-          onClick={() => {
-            onClose();
-            // If on quizzes page, navigate to dashboard to experience the evolved operative journey!
-            if (window.location.pathname.includes('/quizzes')) {
-              window.location.href = '/dashboard';
-            }
-          }}
+          onClick={onClose}
           className="w-full cyber-btn-primary py-3.5 text-xs font-mono uppercase font-black tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-glow-cyan hover:scale-[1.02] transition-transform"
         >
           Equip Evolution & Continue <Award className="w-4 h-4" />

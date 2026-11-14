@@ -131,12 +131,12 @@ QUIZZES_DATA = [
             {
                 "text": "In Clean Architecture and Domain-Driven Design, what does the Dependency Inversion Principle dictate regarding the domain core?",
                 "options": [
-                    "The business logic/domain core must depend directly on the database SQL schema",
                     "High-level domain policies must not depend on low-level infrastructure details; both should depend on abstractions/interfaces",
+                    "The business logic/domain core must depend directly on the database SQL schema",
                     "User interfaces must execute raw SQL queries directly",
                     "Modules must be tightly coupled to a single vendor framework"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In the SOLID principles of Object-Oriented Software Design, what does the 'Single Responsibility Principle' (SRP) mean?",
@@ -151,32 +151,32 @@ QUIZZES_DATA = [
             {
                 "text": "What is the legal difference between a permissive license (e.g. MIT, Apache 2.0) and a copyleft license (e.g. GNU GPLv3)?",
                 "options": [
-                    "MIT code cannot be used commercially",
                     "Permissive licenses allow proprietary closed-source redistribution, while copyleft requires derivative works to remain open under the same license",
+                    "MIT code cannot be used commercially",
                     "GPL prohibits viewing source code",
                     "There is no legal difference between open source software licenses"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "According to Semantic Versioning (SemVer: MAJOR.MINOR.PATCH), when should you increment the MAJOR version number?",
                 "options": [
-                    "When making backwards-compatible bug fixes only",
-                    "When adding new backwards-compatible functionality",
                     "When introducing breaking, incompatible API changes that require consumers to modify their integration",
+                    "When adding new backwards-compatible functionality",
+                    "When making backwards-compatible bug fixes only",
                     "Whenever code is compiled on a Friday"
                 ],
-                "correct": 2,
+                "correct": 0,
             },
             {
                 "text": "In the 12-Factor App methodology for modern SaaS products, how should application configuration (e.g. DB URLs, secrets) be stored?",
                 "options": [
-                    "Hardcoded directly into GitHub public commits",
                     "Strictly in environment variables separated from application source code",
+                    "Hardcoded directly into GitHub public commits",
                     "In local plain-text desktop files",
                     "In unencrypted browser cookie jars"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the key advantage of containerization (Docker) over traditional bare-metal or virtual machine deployments?",
@@ -191,22 +191,22 @@ QUIZZES_DATA = [
             {
                 "text": "In automated CI/CD pipelines, what is a 'Deployment Gate' or 'Quality Gate'?",
                 "options": [
-                    "A physical turnstile in front of the server room",
                     "Automated automated verification checkpoints (e.g. linters, unit tests, security scans) that must pass before deploying to production",
+                    "A physical turnstile in front of the server room",
                     "A manual spreadsheet updated monthly",
                     "A DNS domain transfer restriction"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "When turning a student project into a commercial SaaS product, what is 'Multi-Tenancy'?",
                 "options": [
-                    "Running software only when multiple developers are logged in simultaneously",
                     "A software architecture where a single instance serves multiple distinct customer organizations with strict data isolation",
+                    "Running software only when multiple developers are logged in simultaneously",
                     "Installing multiple operating systems on one laptop",
                     "Splitting code into multiple GitHub branches"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the purpose of an API Gateway in modern commercial microservice architectures?",
@@ -221,12 +221,12 @@ QUIZZES_DATA = [
             {
                 "text": "What is an MVP (Minimum Viable Product) in software product development and commercialization?",
                 "options": [
-                    "A complete 10-year enterprise suite with every conceivable feature",
                     "The simplest functional version of a product that solves the core problem and delivers value to early customers for rapid validation",
+                    "A complete 10-year enterprise suite with every conceivable feature",
                     "A PowerPoint presentation without any working code",
                     "The Most Valuable Programmer on the team"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
         ],
     },
@@ -242,12 +242,12 @@ QUIZZES_DATA = [
             {
                 "text": "In modern cloud infrastructure, what is the primary architectural benefit of Serverless Computing (e.g., AWS Lambda, Google Cloud Functions)?",
                 "options": [
-                    "Servers no longer physically exist anywhere on Earth",
                     "Automatic scaling from zero, event-driven execution, and paying only for the exact compute milliseconds consumed",
+                    "Servers no longer physically exist anywhere on Earth",
                     "Permanent memory retention without any cold starts",
                     "Unrestricted execution time with zero timeout limits"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the primary motivation for implementing 'Edge Computing' in IoT, autonomous systems, and modern mobile apps?",
@@ -282,22 +282,22 @@ QUIZZES_DATA = [
             {
                 "text": "What are the 'Three Pillars of Observability' in modern distributed cloud systems?",
                 "options": [
-                    "HTML, CSS, JavaScript",
                     "Metrics, Logs, and Traces",
+                    "HTML, CSS, JavaScript",
                     "CPU, RAM, Hard Disk",
                     "Frontend, Backend, Database"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the primary role of an event broker like Apache Kafka or RabbitMQ in event-driven microservices?",
                 "options": [
-                    "To serve static image assets to browsers",
                     "To decouple producers and consumers through high-throughput, persistent asynchronous message streaming",
+                    "To serve static image assets to browsers",
                     "To replace relational databases with flat files",
                     "To encrypt passwords with bcrypt"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What capability does WebAssembly (Wasm) introduce to modern web browsers and edge runtimes?",
@@ -312,22 +312,22 @@ QUIZZES_DATA = [
             {
                 "text": "In cloud cost engineering (FinOps), what is the concept of 'Cloud Cost Visibility'?",
                 "options": [
-                    "Making cloud bills publicly accessible on social media",
                     "Tracking, attributing, and optimizing infrastructure spend across engineering teams and microservices in real time",
+                    "Making cloud bills publicly accessible on social media",
                     "Refusing to use cloud providers altogether",
                     "Paying for cloud servers using physical cash"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What does 'Infrastructure as Code' (IaC) with tools like Terraform or Pulumi enable engineering organizations to achieve?",
                 "options": [
-                    "Writing entire applications in JSON without any logic",
                     "Defining, version-controlling, provisioning, and auditing cloud infrastructure programmatically and repeatably",
+                    "Writing entire applications in JSON without any logic",
                     "Manually clicking buttons in cloud web consoles",
                     "Bypassing cloud security firewalls"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "Which career trend represents the convergence of software engineering, infrastructure automation, and AI operations?",
@@ -353,12 +353,12 @@ QUIZZES_DATA = [
             {
                 "text": "In Large Language Models (LLMs), what is a 'Hallucination'?",
                 "options": [
-                    "A hardware overheating failure in server GPUs",
                     "When an AI model generates factually incorrect or fabricated information with high linguistic confidence",
+                    "A hardware overheating failure in server GPUs",
                     "When an AI refuses to generate code due to rate limits",
                     "A feature that renders 3D graphics in virtual reality"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In modern AI architecture, what does RAG (Retrieval-Augmented Generation) do to improve response accuracy?",
@@ -373,32 +373,32 @@ QUIZZES_DATA = [
             {
                 "text": "In Prompt Engineering, what is the difference between 'Zero-Shot' and 'Few-Shot' prompting?",
                 "options": [
-                    "Zero-shot provides zero guidelines; Few-shot requires paying money",
                     "Zero-shot asks the model to perform a task with no examples; Few-shot provides demonstration input/output pairs in the prompt",
+                    "Zero-shot provides zero guidelines; Few-shot requires paying money",
                     "Zero-shot only works in Python; Few-shot works in Java",
                     "There is no difference in prompt performance"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "When using AI coding assistants (e.g. GitHub Copilot, Gemini Code Assist), what is the developer's fundamental ethical and technical responsibility?",
                 "options": [
-                    "Blindly accepting all suggested code without inspection",
                     "Carefully reviewing, understanding, testing, and verifying suggested code for security vulnerabilities, licensing, and correctness",
+                    "Blindly accepting all suggested code without inspection",
                     "Deleting all unit tests because AI code is always infallible",
                     "Claiming to have written every line manually without disclosure"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In university research and academic assignments, what is considered responsible, ethical AI usage?",
                 "options": [
-                    "Submitting an entire AI-generated essay as your own original work without citation",
                     "Using AI as an intellectual brainstorming and proofreading aid while properly citing AI usage and contributing original critical thinking",
+                    "Submitting an entire AI-generated essay as your own original work without citation",
                     "Using AI to fabricate fake laboratory research data",
                     "Copying AI answers directly into closed-book examinations"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What mathematical representation enables AI models and Vector Databases to perform semantic similarity searches?",
@@ -413,22 +413,22 @@ QUIZZES_DATA = [
             {
                 "text": "What is 'AI Bias', and how does it typically originate in modern machine learning systems?",
                 "options": [
-                    "An intentional program error written by malicious coders",
                     "Systematic unfairness or skewed predictions stemming from unrepresentative, historically prejudiced training data or design choices",
+                    "An intentional program error written by malicious coders",
                     "A temporary glitch caused by slow Wi-Fi",
                     "When an AI prefers Python over C++"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In generative image and media synthesis, what is a 'Deepfake'?",
                 "options": [
-                    "A very high-resolution photograph taken in deep ocean trenches",
                     "Synthetic media where a person's likeness, face, or voice is realistically replaced or generated using deep neural networks",
+                    "A very high-resolution photograph taken in deep ocean trenches",
                     "An encrypted backup stored on deep tape drives",
                     "A vector graphic created in Adobe Illustrator"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the role of a 'System Prompt' in governing the behavior of conversational AI agents?",
@@ -474,12 +474,12 @@ QUIZZES_DATA = [
             {
                 "text": "In modern software organizations, what is the core responsibility of a Product Manager (PM)?",
                 "options": [
-                    "Writing all unit tests and deploying code to production",
                     "Defining product vision, roadmap, customer value, and prioritizing features at the intersection of business, tech, and UX",
+                    "Writing all unit tests and deploying code to production",
                     "Managing server physical hardware racks",
                     "Designing the company corporate letterhead"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the primary distinction between a Data Engineer and a Data Scientist?",
@@ -494,22 +494,22 @@ QUIZZES_DATA = [
             {
                 "text": "What is 'Technical Debt' in software development, and why must engineering teams manage it proactively?",
                 "options": [
-                    "The monetary loan taken from a bank to buy office laptops",
                     "The future implied cost of rework caused by choosing an expedited, suboptimal solution now instead of a well-architected approach",
+                    "The monetary loan taken from a bank to buy office laptops",
                     "The monthly invoice paid for cloud hosting servers",
                     "Unpaid salary owed to software developers"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In Agile Scrum methodology, what is the primary purpose of the 'Sprint Retrospective' ceremony?",
                 "options": [
-                    "To assign blame to struggling developers in front of executives",
                     "For the scrum team to reflect on the past sprint, evaluate what went well and what didn't, and plan concrete process improvements",
+                    "To assign blame to struggling developers in front of executives",
                     "To demo software features to paying clients",
                     "To calculate developer annual bonuses"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "In Quality Assurance (QA) engineering, why is automated testing preferred over purely manual testing in fast-paced software environments?",
@@ -544,22 +544,22 @@ QUIZZES_DATA = [
             {
                 "text": "What is the primary role of a Cloud / DevOps Engineer in modern development lifecycles?",
                 "options": [
-                    "Designing user onboarding UI screens",
                     "Automating continuous deployment pipelines, managing cloud infrastructure, monitoring reliability, and accelerating developer delivery velocity",
+                    "Designing user onboarding UI screens",
                     "Selling software licenses to external clients",
                     "Conducting behavioral HR interviews"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
             {
                 "text": "What is the most effective approach for an undergraduate student to build an impactful professional network in the IT industry?",
                 "options": [
-                    "Sending hundreds of generic 'Send me a job' messages to random executives on LinkedIn",
                     "Actively participating in IEEE student branch activities, attending industry hackathons/tech talks, building authentic peer relationships, and sharing technical learnings publicly",
+                    "Sending hundreds of generic 'Send me a job' messages to random executives on LinkedIn",
                     "Waiting until after graduation before speaking to anyone in tech",
                     "Paying marketing agencies to create automated social media bots"
                 ],
-                "correct": 1,
+                "correct": 0,
             },
         ],
     },

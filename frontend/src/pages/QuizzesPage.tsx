@@ -5,7 +5,7 @@ import { Footer } from '../components/common/Footer';
 import { useAuth } from '../contexts/AuthContext';
 import { quizService } from '../services/quizService';
 import type { QuizSummary, QuizDetail, QuizResult } from '../types/quiz';
-import { getEventPoseImage } from '../config/characterAssets';
+import { getEventPoseImage, type CharacterStage, STAGES_METADATA } from '../config/characterAssets';
 import confetti from 'canvas-confetti';
 import {
   Zap,
@@ -84,12 +84,15 @@ export const QuizzesPage: React.FC = () => {
       const result = await quizService.submitQuiz(activeQuiz.id, selectedAnswers);
       setQuizResult(result);
 
+      // Smoothly scroll to the very top immediately so the celebratory character & result card are 100% in focus
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       if (result.passed) {
         confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#a855f7', '#00f0ff', '#10b981', '#f59e0b'],
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.5 },
+          colors: ['#a855f7', '#00f0ff', '#10b981', '#f59e0b', '#ec4899'],
         });
       }
 
@@ -103,6 +106,11 @@ export const QuizzesPage: React.FC = () => {
 
       await refreshUser();
       await fetchQuizzes();
+
+      // Ensure viewport stays focused on the result banner at the top
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 50);
     } catch (err: any) {
       console.error('Quiz submission error:', err);
       const errorMsg = err.response?.data?.detail || err.message || 'Failed to submit quiz.';
@@ -177,27 +185,43 @@ export const QuizzesPage: React.FC = () => {
                 </div>
 
                 {/* THE CHARACTER DISPLAY LARGE */}
-                <div className="relative group my-4">
-                  <div className="w-60 h-76 sm:w-68 sm:h-84 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.35)] relative p-3 bg-cyber-darkest/90 flex flex-col items-center justify-center">
-                    <img
-                      src={getEventPoseImage(
-                        user?.stage_slug || 'recruit',
-                        quizResult.passed ? 4 : 1
-                      )}
-                      alt="Operative Pose"
-                      className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]"
-                    />
+                {(() => {
+                  const getQuizStage = (quizTitle: string): CharacterStage => {
+                    const t = (quizTitle || '').toLowerCase();
+                    if (t.includes('itera')) return 'recruit';
+                    if (t.includes('techcareerx') || t.includes('tech career') || t.includes('builder')) return 'builder';
+                    if (t.includes('futurista') || t.includes('pathfinder')) return 'pathfinder';
+                    if (t.includes('bughunt') || t.includes('bug hunt') || t.includes('operative')) return 'intelligence-operative';
+                    if (t.includes('road to role') || t.includes('vanguard') || t.includes('role')) return 'vanguard';
+                    return (user?.stage_slug as CharacterStage) || 'recruit';
+                  };
+                  const currentQuizStage = getQuizStage(activeQuiz.title);
+                  const stageMetadata = STAGES_METADATA[currentQuizStage] || STAGES_METADATA.recruit;
 
-                    {/* Corner Accents */}
-                    <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-emerald-400" />
-                    <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-emerald-400" />
-                    <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-emerald-400" />
-                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-emerald-400" />
-                  </div>
-                  <div className="mt-2 text-xs font-mono font-bold text-cyan-400">
-                    {user?.character_stage || 'The Recruit'} • {quizResult.passed ? '[Tactical Overdrive Pose]' : '[Standby Mode]'}
-                  </div>
-                </div>
+                  return (
+                    <div className="relative group my-4">
+                      <div className="w-64 h-80 sm:w-72 sm:h-96 mx-auto rounded-2xl overflow-hidden border-2 border-emerald-400/80 shadow-[0_0_40px_rgba(16,185,129,0.35)] relative p-3 bg-cyber-darkest/90 flex flex-col items-center justify-center">
+                        <img
+                          src={getEventPoseImage(
+                            currentQuizStage,
+                            quizResult.passed ? 4 : 1
+                          )}
+                          alt="Operative Pose"
+                          className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(0,240,255,0.45)]"
+                        />
+
+                        {/* Corner Accents */}
+                        <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-emerald-400" />
+                        <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-emerald-400" />
+                        <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-emerald-400" />
+                        <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-emerald-400" />
+                      </div>
+                      <div className="mt-3 text-sm font-mono font-bold text-cyan-400">
+                        {stageMetadata.title} • {quizResult.passed ? '[Tactical Overdrive Pose]' : '[Standby Mode]'}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Performance Metrics Badges */}
                 <div className="inline-flex flex-wrap items-center justify-center gap-4 p-4 rounded-xl bg-cyber-dark/90 border border-cyber-border font-mono text-xs">
@@ -227,11 +251,19 @@ export const QuizzesPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* If next event is unlocked notice */}
+                {quizResult.passed && (
+                  <div className="p-3.5 rounded-xl bg-purple-500/15 border border-purple-500/40 text-purple-300 text-xs font-mono flex items-center justify-center gap-2 shadow-glow-purple max-w-lg mx-auto">
+                    <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                    <span>Operative Progress Recorded! Next Event and avatar are ready on your Dashboard.</span>
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
                   <button
                     onClick={() => navigate('/dashboard')}
-                    className="cyber-btn-primary px-6 py-3 text-xs font-mono uppercase font-black tracking-wider flex items-center gap-2 shadow-glow-cyan cursor-pointer"
+                    className="cyber-btn-primary px-8 py-3.5 text-xs font-mono uppercase font-black tracking-wider flex items-center gap-2 shadow-glow-cyan cursor-pointer text-sm"
                   >
                     Return to Dashboard & Unlock Next Event <ArrowRight className="w-4 h-4" />
                   </button>
@@ -340,118 +372,122 @@ export const QuizzesPage: React.FC = () => {
           </div>
         )}
 
-        {/* QUIZZES LISTING */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-100 font-display">
-            Available Knowledge Challenges
-          </h2>
-          <span className="text-xs font-mono text-slate-400">
-            Total Quizzes: <span className="text-purple-400 font-bold">{quizzes.length}</span>
-          </span>
-        </div>
+        {/* QUIZZES LISTING - ONLY RENDERED WHEN NOT TAKING OR VIEWING A QUIZ */}
+        {!activeQuiz && (
+          <>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-slate-100 font-display">
+                Available Knowledge Challenges
+              </h2>
+              <span className="text-xs font-mono text-slate-400">
+                Total Quizzes: <span className="text-purple-400 font-bold">{quizzes.length}</span>
+              </span>
+            </div>
 
-        {loading ? (
-          <div className="cyber-card p-16 flex flex-col items-center justify-center text-purple-400">
-            <Loader2 className="w-8 h-8 animate-spin mb-3" />
-            <span className="font-mono text-xs uppercase tracking-wider text-slate-400">
-              Loading Challenge Vault...
-            </span>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {quizzes.map((quiz) => (
-              <div
-                key={quiz.id}
-                className="cyber-card p-6 flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono font-bold flex items-center gap-1">
-                      <Zap className="w-3 h-3" /> +{quiz.xp_reward} XP
-                    </span>
-
-                    {quiz.is_completed ? (
-                      <span
-                        className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase ${
-                          quiz.has_passed
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                            : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
-                        }`}
-                      >
-                        {quiz.has_passed ? 'Completed ✅' : 'Attempted'}
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[11px] font-mono uppercase">
-                        Available
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="text-base font-bold text-slate-100 mb-2 leading-snug">
-                    {quiz.title}
-                  </h3>
-
-                  <p className="text-xs text-slate-400 leading-relaxed font-sans line-clamp-3 mb-4">
-                    {quiz.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-cyber-border text-xs font-mono text-slate-400 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span>Questions: {quiz.total_questions}</span>
-                    <span>Passing: {quiz.pass_percentage}%</span>
-                  </div>
-
-                  {quiz.is_completed && (
-                    <div className="p-2 rounded bg-cyber-dark text-[11px] flex justify-between text-slate-300">
-                      <span>Your Score: {quiz.user_score}/{quiz.total_questions} ({quiz.user_percentage}%)</span>
-                      <span className="text-emerald-400 font-bold">+{quiz.xp_earned} XP</span>
-                    </div>
-                  )}
-
-                  <div className="pt-2">
-                    {user?.role === 'ADMIN' ? (
-                      <button
-                        onClick={() => handleStartQuiz(quiz.id)}
-                        disabled={loadingDetail}
-                        className="w-full py-2.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                      >
-                        <Shield className="w-3.5 h-3.5 text-purple-400" /> Preview Quiz (Admin)
-                      </button>
-                    ) : quiz.is_completed ? (
-                      quiz.xp_earned >= quiz.xp_reward ? (
-                        <div className="w-full py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5">
-                          <CheckCircle2 className="w-4 h-4" /> Max XP Achieved (+{quiz.xp_earned} XP)
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => handleStartQuiz(quiz.id)}
-                          disabled={loadingDetail}
-                          className="w-full py-2.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                        >
-                          <RotateCcw className="w-3.5 h-3.5" /> Try Again to Boost XP (+{quiz.xp_reward - quiz.xp_earned} XP remaining)
-                        </button>
-                      )
-                    ) : (
-                      <button
-                        onClick={() => handleStartQuiz(quiz.id)}
-                        disabled={loadingDetail}
-                        className="w-full cyber-btn-primary py-2.5 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5"
-                      >
-                        {loadingDetail ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <>
-                            Enter Quiz Challenge <ChevronRight className="w-4 h-4" />
-                          </>
-                        )}
-                      </button>
-                    )}
-                  </div>
-                </div>
+            {loading ? (
+              <div className="cyber-card p-16 flex flex-col items-center justify-center text-purple-400">
+                <Loader2 className="w-8 h-8 animate-spin mb-3" />
+                <span className="font-mono text-xs uppercase tracking-wider text-slate-400">
+                  Loading Challenge Vault...
+                </span>
               </div>
-            ))}
-          </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {quizzes.map((quiz) => (
+                  <div
+                    key={quiz.id}
+                    className="cyber-card p-6 flex flex-col justify-between hover:border-purple-500/40 transition-all duration-300"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className="px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono font-bold flex items-center gap-1">
+                          <Zap className="w-3 h-3" /> +{quiz.xp_reward} XP
+                        </span>
+
+                        {quiz.is_completed ? (
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold uppercase ${
+                              quiz.has_passed
+                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                                : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'
+                            }`}
+                          >
+                            {quiz.has_passed ? 'Completed ✅' : 'Attempted'}
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[11px] font-mono uppercase">
+                            Available
+                          </span>
+                        )}
+                      </div>
+
+                      <h3 className="text-base font-bold text-slate-100 mb-2 leading-snug">
+                        {quiz.title}
+                      </h3>
+
+                      <p className="text-xs text-slate-400 leading-relaxed font-sans line-clamp-3 mb-4">
+                        {quiz.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 border-t border-cyber-border text-xs font-mono text-slate-400 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span>Questions: {quiz.total_questions}</span>
+                        <span>Passing: {quiz.pass_percentage}%</span>
+                      </div>
+
+                      {quiz.is_completed && (
+                        <div className="p-2 rounded bg-cyber-dark text-[11px] flex justify-between text-slate-300">
+                          <span>Your Score: {quiz.user_score}/{quiz.total_questions} ({quiz.user_percentage}%)</span>
+                          <span className="text-emerald-400 font-bold">+{quiz.xp_earned} XP</span>
+                        </div>
+                      )}
+
+                      <div className="pt-2">
+                        {user?.role === 'ADMIN' ? (
+                          <button
+                            onClick={() => handleStartQuiz(quiz.id)}
+                            disabled={loadingDetail}
+                            className="w-full py-2.5 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <Shield className="w-3.5 h-3.5 text-purple-400" /> Preview Quiz (Admin)
+                          </button>
+                        ) : quiz.is_completed ? (
+                          quiz.xp_earned >= quiz.xp_reward ? (
+                            <div className="w-full py-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold flex items-center justify-center gap-1.5">
+                              <CheckCircle2 className="w-4 h-4" /> Max XP Achieved (+{quiz.xp_earned} XP)
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => handleStartQuiz(quiz.id)}
+                              disabled={loadingDetail}
+                              className="w-full py-2.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" /> Try Again to Boost XP (+{quiz.xp_reward - quiz.xp_earned} XP remaining)
+                            </button>
+                          )
+                        ) : (
+                          <button
+                            onClick={() => handleStartQuiz(quiz.id)}
+                            disabled={loadingDetail}
+                            className="w-full cyber-btn-primary py-2.5 text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-1.5"
+                          >
+                            {loadingDetail ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <>
+                                Enter Quiz Challenge <ChevronRight className="w-4 h-4" />
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </main>
 
