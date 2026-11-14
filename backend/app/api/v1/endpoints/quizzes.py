@@ -198,15 +198,19 @@ def submit_quiz(
     # Proportional score-based XP (e.g. 10 MCQs x 7 XP = 70 XP total)
     current_earned_xp = int(round((correct_count / total_questions) * quiz.xp_reward)) if passed else 0
 
-    # User's prior maximum XP awarded on this quiz
+    # User's prior maximum XP awarded on this quiz (or session)
     prior_max_xp = (
         db.query(func.max(QuizAttempt.xp_awarded))
-        .filter(QuizAttempt.user_id == current_user.id, QuizAttempt.quiz_id == quiz.id)
+        .join(Quiz, Quiz.id == QuizAttempt.quiz_id)
+        .filter(
+            QuizAttempt.user_id == current_user.id,
+            (Quiz.id == quiz.id) | (Quiz.session_id == quiz.session_id)
+        )
         .scalar()
         or 0
     )
 
-    # Incremental XP award (increases student XP if score improved on retake!)
+    # Incremental XP award (strictly adds ONLY the higher score difference on retake!)
     xp_to_award = max(0, current_earned_xp - prior_max_xp)
 
     now_utc = datetime.now(timezone.utc)
