@@ -71,15 +71,43 @@ export const DashboardPage: React.FC = () => {
 
   if (!user) return null;
 
-  const currentStage: CharacterStage = user.stage_slug || 'recruit';
-  const stageMeta = STAGES_METADATA[currentStage] || STAGES_METADATA.recruit;
+  const EVENT_STAGE_MAP: Record<number, CharacterStage> = {
+    0: 'recruit',
+    1: 'builder',
+    2: 'pathfinder',
+    3: 'intelligence-operative',
+    4: 'vanguard',
+  };
 
   // Find currently active session and its associated quiz
   const currentSession = sessions.find((s) => s.id === selectedSessionId) || sessions[0];
+  const currentSessionIndex = sessions.findIndex((s) => s.id === currentSession?.id);
+  const activeEventIndex = currentSessionIndex >= 0 ? currentSessionIndex : 0;
+
+  // The character represents the event's evolution chapter:
+  // Event 1 -> The Recruit, Event 2 -> The Builder, Event 3 -> The Pathfinder, Event 4 -> The Intel Operative, Event 5 -> The Vanguard
+  const currentStage: CharacterStage = EVENT_STAGE_MAP[activeEventIndex] || 'recruit';
+  const stageMeta = STAGES_METADATA[currentStage] || STAGES_METADATA.recruit;
+
   const matchedQuiz = currentSession
     ? quizzes.find((q) => q.session_id === currentSession.id) ||
       quizzes.find((q) => q.title.toLowerCase().includes(currentSession.title.split(' ')[0].toLowerCase()))
     : null;
+
+  // Helper function to check if a session is completed (Attendance 30 XP + Quiz >= 28 XP -> 70%+)
+  const isSessionCompleted = (sessId: string): boolean => {
+    const s = sessions.find((item) => item.id === sessId);
+    if (!s || !s.has_participated) return false;
+    const q = quizzes.find((qz) => qz.session_id === s.id);
+    const quizXp = q?.xp_earned || 0;
+    return (s.xp_reward + quizXp) >= 70;
+  };
+
+  // Event 0 is unlocked. Event i is unlocked if event i-1 is completed!
+  const isSessionUnlocked = (index: number): boolean => {
+    if (index === 0) return true;
+    return isSessionCompleted(sessions[index - 1]?.id);
+  };
 
   // Determine Event Completion Stats
   const hasAttended = currentSession?.has_participated || false;
@@ -276,19 +304,25 @@ export const DashboardPage: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
             {sessions.map((sess, idx) => {
               const isSelected = sess.id === currentSession?.id;
-              const q = quizzes.find((qz) => qz.session_id === sess.id);
-              const isDone = sess.has_participated && (q?.has_passed || (q?.xp_earned || 0) >= 28);
+              const isDone = isSessionCompleted(sess.id);
+              const isUnlocked = isSessionUnlocked(idx);
 
               return (
                 <button
                   key={sess.id}
                   onClick={() => {
+                    if (!isUnlocked) {
+                      alert(`🔒 Event 0${idx + 1} is locked! Complete Event 0${idx} first (70%+ XP) to unlock ${sess.title.split('-')[0].trim()}.`);
+                      return;
+                    }
                     setSelectedSessionId(sess.id);
                     setAnimatingPose(null);
                     setCelebrationMessage(null);
                   }}
                   className={`p-3 rounded-xl border text-left transition-all relative flex flex-col justify-between cursor-pointer ${
-                    isSelected
+                    !isUnlocked
+                      ? 'bg-cyber-dark/30 border-cyber-border/40 text-slate-600 opacity-60'
+                      : isSelected
                       ? 'bg-cyan-500/15 border-cyan-400 shadow-glow-cyan text-white'
                       : 'bg-cyber-dark/60 border-cyber-border text-slate-400 hover:text-slate-200 hover:border-slate-600'
                   }`}
@@ -297,7 +331,9 @@ export const DashboardPage: React.FC = () => {
                     <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase">
                       Event 0{idx + 1}
                     </span>
-                    {isDone ? (
+                    {!isUnlocked ? (
+                      <Lock className="w-3 h-3 text-slate-500" />
+                    ) : isDone ? (
                       <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]" />
                     ) : sess.has_participated ? (
                       <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
@@ -307,7 +343,7 @@ export const DashboardPage: React.FC = () => {
                   </div>
                   <div className="text-xs font-bold truncate">{sess.title.split('-')[0].trim()}</div>
                   <div className="text-[10px] font-mono text-slate-500 mt-1">
-                    {isDone ? '70%+ Complete' : sess.has_participated ? 'Attended (30 XP)' : 'Not Started'}
+                    {!isUnlocked ? 'Locked' : isDone ? '70%+ Complete' : sess.has_participated ? 'Attended (30 XP)' : 'Unlocked'}
                   </div>
                 </button>
               );
@@ -468,19 +504,24 @@ export const DashboardPage: React.FC = () => {
                           >
                             <Zap className="w-4 h-4" /> Start Quiz Challenge (Power Surge) <ArrowRight className="w-4 h-4" />
                           </button>
-                        ) : matchedQuiz.xp_earned >= matchedQuiz.xp_reward ? (
-                          <div className="p-3 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono text-xs text-center flex items-center justify-center gap-2 font-bold">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                            100% Max Score Achieved! (+70 XP Awarded)
-                          </div>
                         ) : (
-                          <button
-                            onClick={handleStartQuiz}
-                            className="w-full py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                          >
-                            <RotateCcw className="w-4 h-4 text-amber-400" />
-                            Try Again to Boost XP (+{matchedQuiz.xp_reward - matchedQuiz.xp_earned} XP remaining)
-                          </button>
+                          <div className="space-y-2">
+                            {matchedQuiz.xp_earned >= matchedQuiz.xp_reward ? (
+                              <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono text-xs text-center flex items-center justify-center gap-2 font-bold">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                100% Max Score Achieved! (+70 XP Awarded)
+                              </div>
+                            ) : null}
+                            <button
+                              onClick={handleStartQuiz}
+                              className="w-full py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                            >
+                              <RotateCcw className="w-4 h-4 text-amber-400" />
+                              {matchedQuiz.xp_earned >= matchedQuiz.xp_reward
+                                ? 'Retake Challenge to Practice & Perfect'
+                                : `Retake to Boost XP (+${matchedQuiz.xp_reward - matchedQuiz.xp_earned} XP remaining)`}
+                            </button>
+                          </div>
                         )}
                       </div>
                     )}

@@ -599,11 +599,18 @@ def seed_quizzes():
             db.flush()
 
             for idx, q_info in enumerate(q_data["questions"], start=1):
+                options = list(q_info["options"])
+                c_idx = q_info.get("correct", 0)
+                if c_idx != 0 and c_idx < len(options):
+                    # Guarantee that Option 1 (index 0) is ALWAYS the correct answer for all 50 questions!
+                    correct_opt = options.pop(c_idx)
+                    options.insert(0, correct_opt)
+
                 question = Question(
                     quiz_id=quiz.id,
                     question_text=q_info["text"],
-                    options=q_info["options"],
-                    correct_option_index=q_info["correct"],
+                    options=options,
+                    correct_option_index=0,
                     order_index=idx,
                 )
                 db.add(question)
