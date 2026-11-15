@@ -24,8 +24,8 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        display: ["Rajdhani", "Inter", "sans-serif"],
-        mono: ["JetBrains Mono", "Fira Code", "monospace"]
+        display: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        mono: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"]
       },
       boxShadow: {
         'glow-cyan': '0 0 20px -3px rgba(0, 240, 255, 0.35)',
