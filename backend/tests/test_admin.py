@@ -51,6 +51,27 @@ def test_admin_endpoints_permission_and_crud(client):
         assert stats["total_students"] >= 1
         assert stats["total_sessions"] >= 5
 
+        # 5b. Admin create student directly
+        new_adm_student_email = f"direct_adm_{uuid.uuid4().hex[:8]}@uwu.ac.lk"
+        res = client.post(
+            "/api/v1/admin/users",
+            json={
+                "full_name": "Direct Admin Enrolled",
+                "email": new_adm_student_email,
+                "password": "Password123!",
+                "university": "Uva Wellassa University",
+                "student_id": "ADM/DIRECT/01",
+                "total_xp": 100,
+            },
+            headers=admin_headers,
+        )
+        assert res.status_code == 201
+        created_adm_student = res.json()
+        assert created_adm_student["full_name"] == "Direct Admin Enrolled"
+        assert created_adm_student["total_xp"] == 100
+        # Cleanup created student
+        client.delete(f"/api/v1/admin/users/{created_adm_student['id']}", headers=admin_headers)
+
         # 6. Admin list students
         res = client.get("/api/v1/admin/users", headers=admin_headers)
         assert res.status_code == 200

@@ -30,6 +30,22 @@ def init_db():
             db.add(admin)
             logger.info("Admin account seeded: admin@visionfusion.ieee.lk")
 
+        # Seed Active Demo Student if not exists
+        student = db.query(User).filter(User.email == "tharushagimhan01@gmail.com").first()
+        if not student:
+            student = User(
+                full_name="Tharusha Gimhan",
+                email="tharushagimhan01@gmail.com",
+                password_hash=get_password_hash("Password123!"),
+                university="Uva Wellassa University",
+                student_id="UWU/CST/20/001",
+                role="STUDENT",
+                character_stage="The Intelligence Operative",
+                total_xp=420,
+            )
+            db.add(student)
+            logger.info("Demo student seeded: tharushagimhan01@gmail.com")
+
         # 2. Seed Default Benchmark Event Sessions if none exist
         if db.query(EventSession).count() == 0:
             sessions_data = [

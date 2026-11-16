@@ -15,11 +15,13 @@ from app.models.quiz_attempt import QuizAttempt
 from app.models.certificate import Certificate
 from app.api.deps import get_current_admin
 from app.core.config import settings
+from app.core.security import get_password_hash
 from app.core.gamification_config import calculate_character_stage
 from app.schemas.admin import (
     AdminStats,
     AdminUserItem,
     AdminUserListResponse,
+    AdminUserCreate,
     AdminUserUpdate,
 )
 
@@ -138,6 +140,58 @@ def list_students(
     return AdminUserListResponse(total=total_count, users=items)
 
 
+@router.post("/users", response_model=AdminUserItem, status_code=status.HTTP_201_CREATED)
+def create_student(
+    student_in: AdminUserCreate,
+    db: Session = Depends(get_db),
+    _: User = Depends(get_current_admin),
+):
+    """Enroll a new student operative directly from the administrative dashboard."""
+    existing_user = db.query(User).filter(func.lower(User.email) == student_in.email.lower()).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"An account with email '{student_in.email}' already exists.",
+        )
+
+    initial_xp = student_in.total_xp or 0
+    progression = calculate_character_stage(initial_xp, settings.TOTAL_POSSIBLE_XP)
+    stage_name = progression["current_stage"].value
+
+    new_student = User(
+        full_name=student_in.full_name.strip(),
+        email=student_in.email.strip().lower(),
+        password_hash=get_password_hash(student_in.password),
+        university=student_in.university.strip() if student_in.university else "Uva Wellassa University",
+        student_id=student_in.student_id.strip() if student_in.student_id else None,
+        role="STUDENT",
+        total_xp=initial_xp,
+        character_stage=stage_name,
+        is_active=True,
+    )
+    db.add(new_student)
+    db.commit()
+    db.refresh(new_student)
+
+    cert_threshold = int((settings.CERTIFICATE_THRESHOLD_PERCENT / 100.0) * settings.TOTAL_POSSIBLE_XP)
+    return AdminUserItem(
+        id=new_student.id,
+        full_name=new_student.full_name,
+        email=new_student.email,
+        university=new_student.university,
+        student_id=new_student.student_id,
+        role=new_student.role,
+        total_xp=new_student.total_xp,
+        character_stage=new_student.character_stage,
+        is_active=new_student.is_active,
+        created_at=new_student.created_at,
+        sessions_attended=0,
+        quizzes_completed=0,
+        certificate_eligible=new_student.total_xp >= cert_threshold,
+        certificate_claimed=False,
+    )
+
+
 @router.put("/users/{user_id}", response_model=AdminUserItem)
 def update_student(
     user_id: str,
@@ -155,6 +209,18 @@ def update_student(
 
     if update_data.full_name is not None:
         student.full_name = update_data.full_name.strip()
+    if update_data.email is not None:
+        target_email = update_data.email.strip().lower()
+        if target_email != student.email:
+            existing_email = db.query(User).filter(func.lower(User.email) == target_email).first()
+            if existing_email:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Email '{target_email}' is already in use by another user.",
+                )
+            student.email = target_email
+    if update_data.password is not None and update_data.password.strip():
+        student.password_hash = get_password_hash(update_data.password.strip())
     if update_data.student_id is not None:
         student.student_id = update_data.student_id.strip() if update_data.student_id else None
     if update_data.university is not None:

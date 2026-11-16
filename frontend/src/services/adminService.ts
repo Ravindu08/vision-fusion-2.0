@@ -32,8 +32,19 @@ export interface AdminUserListResponse {
   users: AdminUserItem[];
 }
 
+export interface AdminUserCreate {
+  full_name: string;
+  email: string;
+  password: string;
+  university?: string;
+  student_id?: string;
+  total_xp?: number;
+}
+
 export interface AdminUserUpdate {
   full_name?: string;
+  email?: string;
+  password?: string;
   student_id?: string;
   university?: string;
   total_xp?: number;
@@ -53,6 +64,11 @@ export const adminService = {
     limit?: number;
   }): Promise<AdminUserListResponse> {
     const res = await apiClient.get<AdminUserListResponse>('/admin/users', { params });
+    return res.data;
+  },
+
+  async createUser(data: AdminUserCreate): Promise<AdminUserItem> {
+    const res = await apiClient.post<AdminUserItem>('/admin/users', data);
     return res.data;
   },
 

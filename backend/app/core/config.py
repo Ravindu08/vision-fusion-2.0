@@ -1,11 +1,16 @@
 from typing import List, Union
+from pathlib import Path
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+DB_FILE = BACKEND_DIR / "vision_fusion.db"
+DEFAULT_SQLITE_URL = f"sqlite:///{DB_FILE.as_posix()}"
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=[str(BACKEND_DIR / ".env"), ".env"],
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="ignore"
@@ -20,8 +25,16 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
 
     # Database
-    DATABASE_URL: str = "postgresql+psycopg://postgres:123456@localhost:5432/vision_fusion"
-    SQLITE_FALLBACK_URL: str = "sqlite:///./vision_fusion.db"
+    DATABASE_URL: str = DEFAULT_SQLITE_URL
+    SQLITE_FALLBACK_URL: str = DEFAULT_SQLITE_URL
+
+    @field_validator("DATABASE_URL", "SQLITE_FALLBACK_URL", mode="after")
+    def resolve_sqlite_path(cls, v: str) -> str:
+        if v.startswith("sqlite:///./"):
+            relative_name = v.replace("sqlite:///./", "")
+            resolved = (BACKEND_DIR / relative_name).as_posix()
+            return f"sqlite:///{resolved}"
+        return v
 
     # Gamification (5 Events x 100 XP = 500 XP total; Certificate at >= 350 XP)
     TOTAL_POSSIBLE_XP: int = 500

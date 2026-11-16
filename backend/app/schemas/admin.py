@@ -37,8 +37,19 @@ class AdminUserListResponse(BaseModel):
     users: List[AdminUserItem]
 
 
+class AdminUserCreate(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr
+    password: str = Field(..., min_length=6, max_length=128)
+    university: Optional[str] = Field(None, max_length=150)
+    student_id: Optional[str] = Field(None, max_length=50)
+    total_xp: Optional[int] = Field(0, ge=0, le=1000)
+
+
 class AdminUserUpdate(BaseModel):
     full_name: Optional[str] = Field(None, min_length=2, max_length=100)
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(None, min_length=6, max_length=128)
     student_id: Optional[str] = Field(None, max_length=50)
     university: Optional[str] = Field(None, max_length=150)
     total_xp: Optional[int] = Field(None, ge=0, le=1000)
